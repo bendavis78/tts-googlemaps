@@ -9,44 +9,32 @@
 <script>
   $(document).ready(function () {
     function initialize() {
-      var mapOptions = {
-        center: new google.maps.LatLng(32.7812034, -96.8064713),
-        zoom: 5
-      };
-
-      var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-      //var items = [];
-      // <% @destinations.each do |destination| %>
-      //   items.push({
-      //     name: '<%= destination.name %>',
-      //     latitude: '<%= destination.latitude %>',
-      //     longitude: '<%= destination.longitude %>',
-      //     photo: '<%= destination.photo %>'
-      //   });
-      // <% end %>
-
-      // items.forEach(function(item) {
+      var map = new google.maps.Map(document.getElementById('map-canvas'), {zoom: 13});
 
       navigator.geolocation.getCurrentPosition(function(position) {
-        var markerLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        if (position) {
+          var markerLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          map.setCenter(markerLatLng);
 
-        var marker = new google.maps.Marker({
-          position: markerLatLng,
-          map: map,
-          name: 'Home',
-          animation: google.maps.Animation.DROP
-        });
+          var marker = new google.maps.Marker({
+            position: markerLatLng,
+            map: map,
+            name: 'Home',
+            animation: google.maps.Animation.DROP
+          });
 
-        var contentString = '<h2>You are here</h2>'
+          var contentString = '<h2>You are here</h2>'
 
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
 
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map, marker);
-        });
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.open(map, marker);
+          });
+        } else {
+          map.setCenter({lat: 32.7812034, lng: -96.8064713});
+        }
       });
 
     }
